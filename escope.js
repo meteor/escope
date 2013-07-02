@@ -629,6 +629,14 @@
                     if (node.left.type === Syntax.VariableDeclaration) {
                         currentScope.__referencing(node.left.declarations[0].id, Reference.WRITE, null);
                     } else {
+                        // check for implicit global variable `for (x in y)`
+                        if (!currentScope.isStrict && node.left.name && !currentScope.isUsedName(node.left.name)) {
+                            globalScope.__define(node.left, {
+                                type: Variable.ImplicitGlobalVariable,
+                                name: node.left,
+                                node: node
+                            });
+                        }
                         currentScope.__referencing(node.left, Reference.WRITE, null);
                     }
                     currentScope.__referencing(node.right);
