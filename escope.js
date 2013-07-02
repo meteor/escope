@@ -451,6 +451,8 @@
                 return true;
             }
         }
+        if (this.upper)
+            return this.upper.isUsedName(name);
         return false;
     };
 
